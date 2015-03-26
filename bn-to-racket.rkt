@@ -150,9 +150,17 @@
 )
 
 ;; Now we need a procedure that can write these lines out to a file
-(define (write-suite-file lines suite-name absolute-dir)
-  (define placeholder (remake-file (string-append absolute-dir "\\" suite-name "_suite.rkt")))
-  (display-lines-to-file lines (string-append absolute-dir "\\" suite-name "_suite.rkt") #:separator"\n"))
+(define (write-suite-file lines absolute-dir)
+  (define path-back (regexp-match #rx"\\\\" absolute-dir))
+  (define path-forward (regexp-match #rx"/" absolute-dir))
+  (cond ((not (equal? path-back #f))
+         (define placeholder (remake-file absolute-dir))
+         (display-lines-to-file lines absolute-dir #:separator"\n"))
+        ((not (equal? path-forward #f))
+         (define placeholder (remake-file absolute-dir))
+         (display-lines-to-file lines absolute-dir #:separator"\n"))
+        (else "undefined"))
+)
 
 ;; **********************************************************************
 ;; * Test Area File Creation Procedures
@@ -184,9 +192,17 @@
 )
 
 ;; Now we need a procedure that can write these lines out to a file
-(define (write-area-file lines suite-name absolute-dir)
-  (define placeholder (remake-file (string-append absolute-dir "\\" suite-name "_area.rkt")))
-  (display-lines-to-file lines (string-append absolute-dir "\\" suite-name "_area.rkt") #:separator"\n"))
+(define (write-area-file lines absolute-dir)
+  (define path-back (regexp-match #rx"\\\\" absolute-dir))
+  (define path-forward (regexp-match #rx"/" absolute-dir))
+  (cond ((not (equal? path-back #f))
+         (define placeholder (remake-file absolute-dir))
+         (display-lines-to-file lines absolute-dir #:separator"\n"))
+        ((not (equal? path-forward #f))
+         (define placeholder (remake-file absolute-dir))
+         (display-lines-to-file lines absolute-dir #:separator"\n"))
+        (else "undefined"))
+)
 
 (provide (all-defined-out))
 
