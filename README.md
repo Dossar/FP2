@@ -8,9 +8,9 @@ For the second exploration solo project I used the GUI Toolkit that comes with R
 The `converter-gui.rkt` script generates a window which allows a user to browse their computer for the source assignment file and the bottlenose test file, along with specifying the testing mode (GUI or textual interface). Then there is a `Convert` button that does everything FP1 did in converting the files and writing to output files. However, an advantage to having this GUI is that it shows the source assignment file path and bottlenose test file path along with test mode so the user knows he/she is working with the desired files. After clicking `Convert` the user will be able to see the paths of the two generated files along with the test mode they specified, so they can go straight to the path of the test area file and run it.
 
 In terms of actually using the GUI library, I just did a `#lang racket/gui` and according to the Racket Documentation it combines the following:
-* All bindings in racket language
-* All bindings in racket/gui/base
-* All bindings in racket/draw
+* All bindings in `racket` language
+* All bindings in `racket/gui/base`
+* All bindings in `racket/draw`
 
 ### Script
 
