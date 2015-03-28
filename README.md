@@ -47,5 +47,7 @@ The output here will consist of screenshots that demonstrate running the script.
 6. Open the test area script and run it. In this case we specified make-gui-runner so we get the RackUnit GUI when running the test area file.
 ![ss6.png](https://raw.githubusercontent.com/Dossar/FP2/master/demo/ss6.png)
 
+I would also like to note that the paths shown here have backslashes, indicating I am using Windows. FP1 had the dependency of Windows for this. In FP2, I've made some changes to try dealing with paths that have forward slashes like in Linux. When in doubt, go by the Browse button paths rather than entering in the paths manually.
+
 <!-- Links -->
 [gui-code-rkt]: https://github.com/Dossar/FP2/blob/master/converter-gui.rkt
