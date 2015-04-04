@@ -141,11 +141,14 @@
   (string-append "  " sublist))
 
 ;; suite-names is a list of the suite names we're creating.
-(define (create-test-suite-list suite-names)
+(define (create-test-suite-list suite-names results-filepath)
   (define test-list-define (list "(define test-list (list"))
   (define test-suite-list (map create-suite-string suite-names))
   (define define-with-suites (append test-list-define test-suite-list (list "))\n")))
-  (define footer-to-return (append define-with-suites (list "(provide (all-defined-out))\n")))
+  (define footer-to-return (append define-with-suites
+                                   (list (string-append "(current-error-port (open-output-file \""
+                                                        results-filepath "\"))\n")
+                                                            "(provide (all-defined-out))\n")))
   footer-to-return
 )
 
@@ -166,18 +169,20 @@
 ;; * Test Area File Creation Procedures
 ;; **********************************************************************
 
-(define (gui-or-text test-mode)
+(define (gui-or-text test-mode number-of-tests)
   (cond ((equal? test-mode "make-gui-runner")
          (list ";; map is used here to allow each test suite to appear in the same GUI window."
+               (string-append ";; >>> " (number->string number-of-tests) " tests to run.")
                "(map (make-gui-runner) test-list)\n"))
         ((equal? test-mode "run-tests")
          (list ";; map is used here to allow each test suite to be run in the textual interface."
+               (string-append ";; >>> " (number->string number-of-tests) " tests to run.")
                "(map run-tests test-list)\n"))
         (else nil)) ;; end cond
 ) ;; end define
         
 
-(define (create-test-area-lines assignment-name test-mode)
+(define (create-test-area-lines assignment-name test-mode number-of-tests)
   (define rkt-header (list "#lang racket\n"
                            ";; Racket Unit Testing Libraries"
                            "(require racket/include)"
@@ -186,7 +191,7 @@
                            "(require rackunit/gui)\n"
                            ";; Suite file for this assignment"
                            (string-append "(require \"" assignment-name "_suite.rkt\")\n")))
-  (define gui-or-text-lines (gui-or-text test-mode))
+  (define gui-or-text-lines (gui-or-text test-mode number-of-tests))
   (define test-area-lines (append rkt-header gui-or-text-lines (list "\n(provide (all-defined-out))\n")))
   test-area-lines
 )

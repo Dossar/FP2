@@ -140,22 +140,24 @@
                   (define testing-mode (send mode-radio get-item-label (send mode-radio get-selection)))
                   (define output-dir (get-dir-from-filepath (send assn-filepath get-value)))
                   
+                  ;; Define the output directories for the test suite and test area files
+                  (define suite-output-dir (get-full-path output-dir assn-name "_suite.rkt"))
+                  (define area-output-dir (get-full-path output-dir assn-name "_area.rkt"))
+                  (define log-error-path (string-join (string-split (get-full-path output-dir "test" "_results.txt") "\\") "/"))
+                  
                   ;; Get a list of all the "ok" test lines in the perl file
                   (define all-tests (get-all-test-information file-lines))
+                  (define total-test-num (length all-tests))
                   
                   ;; Get the list of strings to write out to the suites file for this assignment test file.
                   (define suite-file-header (make-suite-header assn-name))
                   (define bottlenose-suite (create-test-suite assn-name all-tests))
-                  (define suite-file-footer (create-test-suite-list (list assn-name)))
+                  (define suite-file-footer (create-test-suite-list (list assn-name) log-error-path))
                   
                   ;; Create the full lists that are needed to write out to both the test suite and test area files.
                   ;; The mode to pass to create-test-area-lines should be one of "make-gui-runner" or "run-tests"
                   (define scheme-suite-file-lines (append suite-file-header bottlenose-suite suite-file-footer))
-                  (define scheme-area-file-lines (create-test-area-lines assn-name testing-mode))
-                  
-                  ;; Define the output directories for the test suite and test area files
-                  (define suite-output-dir (get-full-path output-dir assn-name "_suite.rkt"))
-                  (define area-output-dir (get-full-path output-dir assn-name "_area.rkt"))
+                  (define scheme-area-file-lines (create-test-area-lines assn-name testing-mode total-test-num))                  
                   
                   ;; Write the suite file
                   ;(write-suite-file scheme-suite-file-lines assn-name output-dir)
