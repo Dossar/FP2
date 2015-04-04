@@ -209,5 +209,50 @@
         (else "undefined"))
 )
 
+;; **********************************************************************
+;; * Windows/Unix Filepath Utilities
+;; **********************************************************************
+
+(define (get-assn-from-filepath absolute-dir)
+  (define separation-back-slash (string-split absolute-dir "\\"))
+  (define assignment-back (if (not (equal? (regexp-match #rx"\\\\" absolute-dir) #f))
+                              (regexp-match #rx"^\\s*(.*)\\.rkt$" (last separation-back-slash))
+                              #f))
+  (define separation-forward-slash (string-split absolute-dir "/"))
+  (define assignment-forward (if (not (equal? (regexp-match #rx"/" absolute-dir) #f))
+                                 (regexp-match #rx"^\\s*(.*)\\.rkt$" (last separation-forward-slash))
+                                 #f))
+  (cond ((not (equal? assignment-back #f)) (cadr assignment-back))
+        ((not (equal? assignment-forward #f)) (cadr assignment-forward))
+        (else "undefined")))
+
+(define (get-dir-from-filepath absolute-dir)
+  (define path-back (regexp-match #rx"\\\\" absolute-dir))
+  (define path-forward (regexp-match #rx"/" absolute-dir))
+  (cond ((not (equal? path-back #f))
+         (string-join (butlast (string-split absolute-dir "\\")) "\\"))
+        ((not (equal? path-forward #f))
+         (string-join (butlast (string-split absolute-dir "/")) "/"))
+        (else "undefined"))
+)
+
+(define (get-full-path absolute-dir assignment-name filetype)
+  (define path-back (regexp-match #rx"\\\\" absolute-dir))
+  (define path-forward (regexp-match #rx"/" absolute-dir))
+  (cond ((not (equal? path-back #f))
+         (string-append absolute-dir "\\" assignment-name filetype))
+        ((not (equal? path-forward #f))
+         (string-append "/" absolute-dir "/" assignment-name filetype))
+        (else "undefined"))
+)
+
+(define (butlast lst)
+  (define (helper current lst counter)
+    (if (> counter 1)
+        (helper (append current (list (car lst)))
+                (cdr lst) (- counter 1))
+        current));; end helper
+ (helper '() lst (length lst))) ;; end outer define
+
 (provide (all-defined-out))
 
