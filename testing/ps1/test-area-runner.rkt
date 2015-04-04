@@ -115,7 +115,54 @@
 (define (get-all-expected-values all-lines)
   (map parse-expected-value (filter is-expected? all-lines)))
 
+;; Put in order the test case names, suite location, actual values, and expected values.
+;; The results file for the suite is to be used separately from this list.
+; '(("(comb 3 2)" "ps1_suite.rkt:21:26" "1" "3")
+;  ("(comb 4 2)" "ps1_suite.rkt:22:26" "1" "6")
+;  ("(comb 10 2)" "ps1_suite.rkt:23:27" "1" "45")
+;  ("(comb 93 37)" "ps1_suite.rkt:24:28" "1" "118206769052646517220135262"))
+(define (get-all-test-information all-lines)
+  (zip (get-all-test-cases all-lines)
+       (get-all-suite-locations all-lines)
+       (get-all-actual-values all-lines)
+       (get-all-expected-values all-lines)))
 
+;; **********************************************************************
+;; * Procedures for creating a list of strings to write out to file:
+;; * - A list of strings representing the failed test case information
+;; * - A list of strings representing the pass/fail rate
+;; * - Combining these two lists
+;; **********************************************************************
+
+;; The sublist passed contains four pieces of information in this order:
+;; Test case name, suite location, actual value, expected value.
+(define (create-failed-case sublist)
+  (string-append "> FAILED: '" (car sublist) "' in '" (cadr sublist) "'"
+                 "\nactual: " (caddr sublist) "\nexpected: " (cadddr sublist) "\n"))
+
+;; (create-list-of-failed-cases file-lines)
+(define (create-list-of-failed-cases all-lines)
+  (map create-failed-case (get-all-test-information all-lines)))
+
+; Try (create-failed-cases-data num-failed num-tests suite-name)
+(define (create-failed-cases-data num-failed-cases num-cases test-suite-name)
+  (define num-passed-cases (- num-cases num-failed-cases))
+  (define percent-failed (round (* (/ num-failed-cases num-cases) 100)))
+  (define percent-passed (round (* (/ num-passed-cases num-cases) 100)))
+  (define suite-result-header (list (string-append ">>> Results for test suite '" test-suite-name "'")
+                                    (string-append "\n-> Total: " (number->string num-cases))
+                                    (string-append "-> Passed: " (number->string num-passed-cases)
+                                                   " (" (number->string percent-passed) "%)")
+                                    (string-append "-> Failed: " (number->string num-failed-cases)
+                                                   " (" (number->string percent-failed) "%)\n")
+                                    )) ; end suite-result-header list and define
+  suite-result-header
+)
+
+(define (create-failed-cases-lines all-lines failed-num total-num name-of-suite)
+  (define failed-case-header (create-failed-cases-data failed-num total-num name-of-suite))
+  (define failed-case-list (create-list-of-failed-cases all-lines))
+  (append failed-case-header failed-case-list))
 
 
 ;; **********************************************************************
@@ -123,7 +170,11 @@
 ;; **********************************************************************
 
 ; Read in test results file to get its lines.
+(require "ps1_area.rkt")
 (define file-lines (file->lines "test_results.txt"))
+(define suite-name (get-results-suite-name file-lines))
+(define failed-case-lines-to-write (create-failed-cases-lines file-lines num-failed num-tests suite-name))
+(display-lines-to-file failed-case-lines-to-write "ps1_email.txt" #:separator"\n")
 
 ;(provide (all-defined-out))
 ;
