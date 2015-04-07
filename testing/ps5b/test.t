@@ -42,25 +42,25 @@ sub scm_equal_sign {
 
 use Test::Simple tests => 38;
 
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(make-sum 'x 3)"), "'(x + 3)"), "infix make-sum constructor");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(sum? (make-sum 'x 3))"), "#t"), "infix sum predicate");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(addend (make-sum 'x 3))"), "'x"), "infix addend selector");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(augend (make-sum 'x 3))"), "3"), "infix augend selector");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(make-sum-infix 'x 3)"), "'(x + 3)"), "infix make-sum constructor");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(sum?-infix (make-sum-infix 'x 3))"), "#t"), "infix sum predicate");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(addend-infix (make-sum-infix 'x 3))"), "'x"), "infix addend selector");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(augend-infix (make-sum-infix 'x 3))"), "3"), "infix augend selector");
 
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(make-product 'x 3)"), "'(x * 3)"), "infix make-product constructor");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(product? (make-product 'x 3))"), "#t"), "infix product predicate");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(multiplier (make-product 'x 3))"), "'x"), "infix multiplier selector");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(multiplicand (make-product 'x 3))"), "3"), "infix multiplicand selector");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(make-product-infix 'x 3)"), "'(x * 3)"), "infix make-product constructor");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(product?-infix (make-product-infix 'x 3))"), "#t"), "infix product predicate");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(multiplier-infix (make-product-infix 'x 3))"), "'x"), "infix multiplier selector");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(multiplicand-infix (make-product-infix 'x 3))"), "3"), "infix multiplicand selector");
 
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(make-exponentiation 'x 3)"), "'(x ** 3)"), "infix make-exponentiation constructor");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(exponentiation? (make-exponentiation 'x 3))"), "#t"), "infix exponentiation predicate");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(base (make-exponentiation 'x 3))"), "'x"), "infix exponentiation base selector");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(exponent (make-exponentiation 'x 3))"), "3"), "infix exponentiation exponent selector");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(make-exponentiation-infix 'x 3)"), "'(x ** 3)"), "infix make-exponentiation constructor");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(exponentiation?-infix (make-exponentiation-infix 'x 3))"), "#t"), "infix exponentiation predicate");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(base-infix (make-exponentiation-infix 'x 3))"), "'x"), "infix exponentiation base selector");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(exponent-infix (make-exponentiation-infix 'x 3))"), "3"), "infix exponentiation exponent selector");
 
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv '(x + 3) 'x)"), "1"), "(deriv '(x + 3) 'x)");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv '(x * (y * (x + 3))) 'x)"), "'((x * y) + (y * (x + 3)))"), "(deriv '(x * (y * (x + 3))) 'x)");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv '((x * y) * (x + 3)) 'x)"), "'((x * y) + (y * (x + 3)))"), "(deriv '((x * y) * (x + 3)) 'x)");
-ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv '((x ** 3) + (x ** 2)) 'x)"), "'((3 * (x ** 2)) + (2 * x))"), "(deriv '((x ** 3) + (x ** 2)) 'x)");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv-infix '(x + 3) 'x)"), "1"), "(deriv-infix '(x + 3) 'x)");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv-infix '(x * (y * (x + 3))) 'x)"), "'((x * y) + (y * (x + 3)))"), "(deriv-infix '(x * (y * (x + 3))) 'x)");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv-infix '((x * y) * (x + 3)) 'x)"), "'((x * y) + (y * (x + 3)))"), "(deriv-infix '((x * y) * (x + 3)) 'x)");
+ok(scm_equal(scm_eval("exercise2-58.rkt", "(deriv-infix '((x ** 3) + (x ** 2)) 'x)"), "'((3 * (x ** 2)) + (2 * x))"), "(deriv-infix '((x ** 3) + (x ** 2)) 'x)");
 
 ok(scm_equal(scm_eval("exercise2-57.rkt", "(make-sum 'x 3)"), "'(+ x 3)"), "(make-sum 'x 3) is '(+ x 3)");
 ok(scm_equal(scm_eval("exercise2-57.rkt", "(make-sum 1 2)"), "3"), "(make-sum 1 2) is 3");

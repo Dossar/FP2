@@ -7,6 +7,7 @@
 (require rackunit/gui)
 
 ;; Suite file for this assignment
+(define suite-name "ps1")
 (require "ps1_suite.rkt")
 
 ;; Function for recreating a file when running these tests

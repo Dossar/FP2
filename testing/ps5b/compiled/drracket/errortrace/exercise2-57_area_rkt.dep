@@ -1,0 +1,1 @@
+("6.1.1" ("61a80e3c73f08f5efdd3a46551837314898065fc" . "dc32af01f98c5a75bcaa20174d878a46bf11d5b6") (collects #"racket" #"main.rkt") (collects #"racket" #"include.rkt") (collects #"rackunit" #"text-ui.rkt") #"C:\\OPL\\FP2\\FP2\\testing\\ps5b\\exercise2-57_suite.rkt" (collects #"rackunit" #"gui.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"rackunit" #"main.rkt"))

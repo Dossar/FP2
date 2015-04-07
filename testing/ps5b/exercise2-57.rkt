@@ -191,4 +191,4 @@
 	(else
 	 (error "unknown expression type -- DERIV" exp))))
 
-
+(provide (all-defined-out))

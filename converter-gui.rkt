@@ -103,7 +103,7 @@
                   (define total-test-num (length all-tests))
                   
                   ;; Get the list of strings to write out to the suites file for this assignment test file.
-                  (define suite-file-header (make-suite-header assn-name))
+                  (define suite-file-header (make-suite-header assn-name file-lines))
                   (define bottlenose-suite (create-test-suite assn-name all-tests))
                   (define suite-file-footer (create-test-suite-list (list assn-name)))
                   

@@ -38,3 +38,6 @@ location:   ps1_suite.rkt:24:28
 actual:     1
 expected:   118206769052646517220135262
 ps1_suite.rkt:24:28: Check failure
+--------------------
+Finished Test Suite 'ps1'
+26 success(es) 4 failure(s) 0 error(s) 30 test(s) run

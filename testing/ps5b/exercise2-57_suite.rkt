@@ -1,0 +1,56 @@
+#lang racket
+
+(require rackunit)
+(require "exercise2-58.rkt")
+(require "exercise2-57.rkt")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define-test-suite exercise2-57
+  #:before (lambda () (display "Starting Test Suite 'exercise2-57'\n"))
+  #:after (lambda () (display "Finished Test Suite 'exercise2-57'\n"))
+  (test-case "infix make-sum constructor" (check-equal? (make-sum-infix 'x 3) '(x + 3)))
+  (test-case "infix sum predicate" (check-equal? (sum?-infix (make-sum-infix 'x 3)) #t))
+  (test-case "infix addend selector" (check-equal? (addend-infix (make-sum-infix 'x 3)) 'x))
+  (test-case "infix augend selector" (check-equal? (augend-infix (make-sum-infix 'x 3)) 3))
+  (test-case "infix make-product constructor" (check-equal? (make-product-infix 'x 3) '(x * 3)))
+  (test-case "infix product predicate" (check-equal? (product?-infix (make-product-infix 'x 3)) #t))
+  (test-case "infix multiplier selector" (check-equal? (multiplier-infix (make-product-infix 'x 3)) 'x))
+  (test-case "infix multiplicand selector" (check-equal? (multiplicand-infix (make-product-infix 'x 3)) 3))
+  (test-case "infix make-exponentiation constructor" (check-equal? (make-exponentiation-infix 'x 3) '(x ** 3)))
+  (test-case "infix exponentiation predicate" (check-equal? (exponentiation?-infix (make-exponentiation-infix 'x 3)) #t))
+  (test-case "infix exponentiation base selector" (check-equal? (base-infix (make-exponentiation-infix 'x 3)) 'x))
+  (test-case "infix exponentiation exponent selector" (check-equal? (exponent-infix (make-exponentiation-infix 'x 3)) 3))
+  (test-case "(deriv-infix '(x + 3) 'x)" (check-equal? (deriv-infix '(x + 3) 'x) 1))
+  (test-case "(deriv-infix '(x * (y * (x + 3))) 'x)" (check-equal? (deriv-infix '(x * (y * (x + 3))) 'x) '((x * y) + (y * (x + 3)))))
+  (test-case "(deriv-infix '((x * y) * (x + 3)) 'x)" (check-equal? (deriv-infix '((x * y) * (x + 3)) 'x) '((x * y) + (y * (x + 3)))))
+  (test-case "(deriv-infix '((x ** 3) + (x ** 2)) 'x)" (check-equal? (deriv-infix '((x ** 3) + (x ** 2)) 'x) '((3 * (x ** 2)) + (2 * x))))
+  (test-case "(make-sum 'x 3) is '(+ x 3)" (check-equal? (make-sum 'x 3) '(+ x 3)))
+  (test-case "(make-sum 1 2) is 3" (check-equal? (make-sum 1 2) 3))
+  (test-case "(make-sum 'x 0) is 'x" (check-equal? (make-sum 'x 0) 'x))
+  (test-case "(make-sum 0 'x) is 'x" (check-equal? (make-sum 0 'x) 'x))
+  (test-case "(make-sum 'x) is 'x" (check-equal? (make-sum 'x) 'x))
+  (test-case "(make-sum 'x 'y 'z) is '(+ x y z)" (check-equal? (make-sum 'x 'y 'z) '(+ x y z)))
+  (test-case "(addend '(+ x 3)) is 'x" (check-equal? (addend '(+ x 3)) 'x))
+  (test-case "(augend '(+ x 3)) is 3" (check-equal? (augend '(+ x 3)) 3))
+  (test-case "(addend '(+ x y z)) is 'x" (check-equal? (addend '(+ x y z)) 'x))
+  (test-case "(augend '(+ x y z)) is '(+ y z)" (check-equal? (augend '(+ x y z)) '(+ y z)))
+  (test-case "(make-product 'x 3) is '(* x 3)" (check-equal? (make-product 'x 3) '(* x 3)))
+  (test-case "(make-product 1 2) is 2" (check-equal? (make-product 1 2) 2))
+  (test-case "(make-product 'x 1) is 'x" (check-equal? (make-product 'x 1) 'x))
+  (test-case "(make-product 1 'x) is 'x" (check-equal? (make-product 1 'x) 'x))
+  (test-case "(make-product 'x) is 'x" (check-equal? (make-product 'x) 'x))
+  (test-case "(make-product 'x 'y 'z) is '(* x y z)" (check-equal? (make-product 'x 'y 'z) '(* x y z)))
+  (test-case "(multiplier '(* x 3)) is 'x" (check-equal? (multiplier '(* x 3)) 'x))
+  (test-case "(multiplicand '(* x 3)) is 3" (check-equal? (multiplicand '(* x 3)) 3))
+  (test-case "(multiplier '(* x y z)) is 'x" (check-equal? (multiplier '(* x y z)) 'x))
+  (test-case "(multiplicand '(* x y z)) is '(* y z)" (check-equal? (multiplicand '(* x y z)) '(* y z)))
+  (test-case "(multiplicand equation1) is correct" (check-equal? (multiplicand equation1) '(* y (+ x 3))))
+  (test-case "(deriv equation1 'x) is correct" (check-equal? (deriv equation1 'x) '(+ (* x y) (* y (+ x 3)))))
+)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define test-list (list
+  exercise2-57
+))
+
+(provide (all-defined-out))
+

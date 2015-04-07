@@ -12,8 +12,10 @@
 
 (require racket/file)
 (define nil '())
-(define ps1-line "ok(scm_equal(scm_eval(\"(comb 10 2)\"), 45), \"(comb 10 2)\");")
-(define ps5-line "ok(scm_equal(scm_eval(\"exercise2-57.rkt\", \"(multiplier '(* x y z))\"), \"'x\"), \"(multiplier '(* x y z)) is 'x\");")
+;(define deriv-lines (file->lines "test.t"))
+;(define simple-lines (file->lines "ps1.t"))
+;(define ps1-line "ok(scm_equal(scm_eval(\"(comb 10 2)\"), 45), \"(comb 10 2)\");")
+;(define ps5-line "ok(scm_equal(scm_eval(\"exercise2-57.rkt\", \"(multiplier '(* x y z))\"), \"'x\"), \"(multiplier '(* x y z)) is 'x\");")
 
 ;; **********************************************************************
 ;; * Selectors for finding certain parts of the perl test case
@@ -27,7 +29,7 @@
   (define all-parts (string-split line ","))
   (if (= (length all-parts) 4)
       (string-trim (car all-parts))
-      "")
+      "none")
 )
 
 ;; Gets first test input part of the line to parse in regexp in find-test-input
@@ -59,7 +61,7 @@
   (define expected (regexp-match #rx"\\\"\\s*(.*)\\s*\\\"" line))
   (if (not (equal? expected #f))
       (string-trim (cadr expected))
-      #f)
+      "none")
 )
 
 ;; first-test for scheme test inputs
@@ -118,6 +120,15 @@
        (get-all-expected-values all-lines)
        (get-all-test-names all-lines)))
 
+(define (get-all-loaded-files all-lines)
+  (remove-duplicates (map find-loaded-file (map get-loaded-file (filter is-test? all-lines)))))
+
+(define (create-requires-for-loads loaded-file-list)
+  (if (null? loaded-file-list)
+      nil
+      (cons (string-append "(require \"" (car loaded-file-list) "\")") (create-requires-for-loads (cdr loaded-file-list))))
+)
+
 ;; **********************************************************************
 ;; * Procedures for creating strings representing what we want to write
 ;; * out to our suite file for the test cases inside the test suite.
@@ -149,11 +160,14 @@
     0))
 
 ;; Create header of the suite file
-(define (make-suite-header assignment-name)
+(define (make-suite-header assignment-name all-lines)
+  (define all-source-requires (create-requires-for-loads (get-all-loaded-files all-lines)))
   (define rkt-header (list "#lang racket\n"
-                           "(require rackunit)"
-                           (string-append "(require \"" assignment-name ".rkt\")\n")))                
-  rkt-header
+                           "(require rackunit)"))
+  (define single-assignment-require (list (string-append "(require \"" assignment-name ".rkt\")\n")))
+  (if (= (length all-source-requires) 1)
+      (append rkt-header single-assignment-require)
+      (append rkt-header all-source-requires))
 )
 
 ;; Create test-list for this bottlenose suite
