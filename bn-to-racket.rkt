@@ -12,6 +12,7 @@
 
 (require racket/file)
 (define nil '())
+(define freds-line "")
 
 ;; **********************************************************************
 ;; * Selectors for finding certain parts of the perl test case
@@ -187,6 +188,7 @@
                            "(require rackunit/text-ui)"
                            "(require rackunit/gui)\n"
                            ";; Suite file for this assignment"
+                           (string-append "(define suite-name \"" assignment-name "\")")
                            (string-append "(require \"" assignment-name "_suite.rkt\")\n")
                            ";; Function for recreating a file when running these tests"
                            (string-append "(define (remake-file file-path)\n  (if (file-exists? file-path)"

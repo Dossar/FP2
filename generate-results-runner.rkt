@@ -36,7 +36,6 @@
                                   (string-append "\n;; This line will run the tests\n(require \"" area-filename "\")")
                                   "\n;; Read in the lines from the test results file"
                                   "(define file-lines (file->lines \"test_results.txt\"))"
-                                  "(define suite-name (get-results-suite-name file-lines))"
                                   (string-append "(define failed-case-lines-to-write (create-failed-cases-lines "
                                                  "file-lines num-failed num-tests suite-name))")
                                   (string-append "(display-lines-to-file failed-case-lines-to-write "

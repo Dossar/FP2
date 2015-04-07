@@ -1,0 +1,6 @@
+>>> Results for test suite 'ps2a'
+
+-> Total: 15
+-> Passed: 15 (100%)
+-> Failed: 0 (0%)
+
