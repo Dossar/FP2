@@ -1,1 +1,0 @@
-("6.1.1" ("1852c25e44890fcbbc1910b14d77a070327de953" . "5b70616ffec183e3f4e60a65c9dd9bda8415d6c4") #"C:\\OPL\\FP2\\FP2\\testing\\ps5b\\exercise2-58.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") #"C:\\OPL\\FP2\\FP2\\testing\\ps5b\\exercise2-57.rkt" (collects #"rackunit" #"main.rkt"))
