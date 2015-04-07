@@ -12,7 +12,8 @@
 
 (require racket/file)
 (define nil '())
-(define freds-line "")
+(define ps1-line "ok(scm_equal(scm_eval(\"(comb 10 2)\"), 45), \"(comb 10 2)\");")
+(define ps5-line "ok(scm_equal(scm_eval(\"exercise2-57.rkt\", \"(multiplier '(* x y z))\"), \"'x\"), \"(multiplier '(* x y z)) is 'x\");")
 
 ;; **********************************************************************
 ;; * Selectors for finding certain parts of the perl test case
@@ -22,21 +23,44 @@
 (define (is-test? line)
   (if (regexp-match #rx"^\\s*ok.*" line) #t #f))
 
+(define (get-loaded-file line)
+  (define all-parts (string-split line ","))
+  (if (= (length all-parts) 4)
+      (string-trim (car all-parts))
+      "")
+)
+
 ;; Gets first test input part of the line to parse in regexp in find-test-input
 (define (get-test-input line)
-  (car (string-split line ",")))
+  (define all-parts (string-split line ","))
+  (if (= (length all-parts) 3)
+      (car all-parts)
+      (string-append "(" (string-trim (cadr all-parts)))))
 
 ;; Gets second expected value part of the line to parse in regexp in find-expected-value
 (define (get-expected-value line)
-  (cadr (string-split line ",")))
+  (define all-parts (string-split line ","))
+  (if (= (length all-parts) 3)
+      (cadr all-parts)
+      (caddr all-parts)))
 
 ;; Gets third test name part of the line to parse in regexp in find-test-name
 (define (get-test-name line)
-  (caddr (string-split line ",")))
+  (define all-parts (string-split line ","))
+  (if (= (length all-parts) 3)
+      (caddr all-parts)
+      (cadddr all-parts)))
 
 ;; **********************************************************************
 ;; * Constructors for removing unnecessary parts of the perl test case
 ;; **********************************************************************
+
+(define (find-loaded-file line)
+  (define expected (regexp-match #rx"\\\"\\s*(.*)\\s*\\\"" line))
+  (if (not (equal? expected #f))
+      (string-trim (cadr expected))
+      #f)
+)
 
 ;; first-test for scheme test inputs
 (define (find-test-input line)
@@ -53,7 +77,7 @@
 (define (find-expected-value line)
   (define expected (regexp-match #rx"^\\s*(.*)\\)$" line))
   (if (not (equal? expected #f))
-      (string-trim (cadr expected))
+      (string-trim (string-trim (cadr expected)) "\"")
       #f))
 
 ;; third-test for test names
