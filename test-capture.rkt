@@ -1,7 +1,6 @@
 #lang racket/gui
 
 ;; Load in definitions from test-area-runner for procedures that create strings to write out to a file
-;(require "test-area-runner.rkt")
 (require "bn-to-racket.rkt") ; Windows/Unix filepath utilities
 
 ; We want to write a new file with the definitions of test-area-runner
@@ -17,13 +16,6 @@
 ;; * Procedures for writing a new file
 ;; **********************************************************************
 
-;; Read in test results file to get its lines.
-;(require "ps1_area.rkt")
-;(define file-lines (file->lines "test_results.txt"))
-;(define suite-name (get-results-suite-name file-lines))
-;(define failed-case-lines-to-write (create-failed-cases-lines file-lines num-failed num-tests suite-name))
-;(display-lines-to-file failed-case-lines-to-write "ps1_email.txt" #:separator"\n")
-
 ; Takes test area file directory to generate a new script in the same directory
 ; to be run on the tests and generate results. This will be placed after the
 ; loaded test-area-runner lines, so this will be at the end of the file
@@ -38,11 +30,11 @@
                                   "(define file-lines (file->lines \"test_results.txt\"))"
                                   (string-append "(define failed-case-lines-to-write (create-failed-cases-lines "
                                                  "file-lines num-failed num-tests suite-name))")
+                                  "(remake-file \"test_email.txt\")"
                                   (string-append "(display-lines-to-file failed-case-lines-to-write "
                                                  "\"test_email.txt\" #:separator\"\\n\")")))
   run-script-header
 )
-
 
 
 ;; **********************************************************************
@@ -51,7 +43,7 @@
 
 ; Create a dialog window
 (define dialog (new frame%
-                         (label "Test-Results Script Generator")))
+                         (label "Test-Capture")))
 
 ; Display simple message prompting user to enter input
 (define description (string-append "Awaiting area file to generate a run script for."))
@@ -82,7 +74,7 @@
                  (send suite-filepath set-value (path->string filepath)))))
 
 ;; **********************************************************************
-;; * FILE CREATION CONVERT BUTTON
+;; * FILE CREATION AND RUNNING BUTTON
 ;; **********************************************************************
 
 ; Create the convert button
@@ -108,14 +100,15 @@
                   (send user-prompt set-label (string-append "Created 'test_script.rkt' for "
                                                              "test area file '" area-file "'."))
                   
+                  ;; Run the generated test running script. Change working directory to that script's directory.
+                  (current-directory output-dir)
+                  (system (string-append "racket " run-script-path))
+                  
+                  
                                     ) ; end lambda
       ] ; end callback
 ) ;; end button
                   
-
-
-
-
 
 ; Show the dialog
 (send dialog show #t)
