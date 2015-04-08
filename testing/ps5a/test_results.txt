@@ -1,2 +1,0 @@
-Starting Test Suite 'exercises'
-Finished Test Suite 'exercises'

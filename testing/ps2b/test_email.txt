@@ -1,6 +1,0 @@
->>> Results for test suite 'ps2b'
-
--> Total: 8
--> Passed: 8 (100%)
--> Failed: 0 (0%)
-

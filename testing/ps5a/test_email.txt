@@ -1,6 +1,0 @@
->>> Results for test suite 'exercises'
-
--> Total: 14
--> Passed: 14 (100%)
--> Failed: 0 (0%)
-

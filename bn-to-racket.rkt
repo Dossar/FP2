@@ -12,10 +12,6 @@
 
 (require racket/file)
 (define nil '())
-;(define deriv-lines (file->lines "test.t"))
-;(define simple-lines (file->lines "ps1.t"))
-;(define ps1-line "ok(scm_equal(scm_eval(\"(comb 10 2)\"), 45), \"(comb 10 2)\");")
-;(define ps5-line "ok(scm_equal(scm_eval(\"exercise2-57.rkt\", \"(multiplier '(* x y z))\"), \"'x\"), \"(multiplier '(* x y z)) is 'x\");")
 
 ;; **********************************************************************
 ;; * Selectors for finding certain parts of the perl test case
@@ -208,12 +204,14 @@
         ((equal? test-mode "run-tests")
          (list ";; map is used here to allow each test suite to be run in the textual interface."
                "(remake-file \"test_results.txt\")"
-               "(current-error-port (open-output-file \"test_results.txt\")) ; File containing failed cases"
+               "(define test-result-file (open-output-file \"test_results.txt\"))"
+               "(current-error-port test-result-file) ; File containing failed cases"
                (string-append "(define num-tests " (number->string number-of-tests) ")")
                "(define num-failed (car (map run-tests test-list))) ; run-tests returns list with number of failed cases"
                "(define num-passed (- num-tests num-failed)) ; How many passed"
                "(define failed (/ num-failed num-tests))"
-               "(define successful (/ num-passed num-tests))"))
+               "(define successful (/ num-passed num-tests))"
+               "(close-output-port test-result-file)"))
         (else nil)) ;; end cond
 ) ;; end define
         
